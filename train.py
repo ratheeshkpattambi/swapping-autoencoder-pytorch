@@ -248,7 +248,9 @@ def train(
         loss_dict["g_cooccur"] = g_cooccur_loss
 
         g_optim.zero_grad()
-        (recon_loss + g_loss + g_cooccur_loss).backward()
+        (recon_loss + g_loss + g_cooccur_loss).backward()#RK
+        #recon_loss.backward()
+        #g_loss.backward()
         g_optim.step()
 
         accumulate(e_ema, e_module, accum)
@@ -375,7 +377,7 @@ if __name__ == "__main__":
     discriminator = Discriminator(
         args.size, channel_multiplier=args.channel_multiplier
     ).to(device)
-    cooccur = CooccurDiscriminator(args.channel).to(device)
+    cooccur = CooccurDiscriminator(args.channel,size=args.size).to(device)
 
     e_ema = Encoder(args.channel).to(device)
     g_ema = Generator(args.channel).to(device)
